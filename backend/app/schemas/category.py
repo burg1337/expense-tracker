@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 from app.models.category import TransactionType
 
 
@@ -12,8 +13,8 @@ class CategoryCreate(CategoryBase):
 
 
 class CategoryUpdate(BaseModel):
-    name: str | None = None
-    type: TransactionType | None = None
+    name: Optional[str] = None
+    type: Optional[TransactionType] = None
 
 
 class CategoryResponse(CategoryBase):

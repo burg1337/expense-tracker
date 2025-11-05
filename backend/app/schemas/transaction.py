@@ -1,12 +1,13 @@
 from pydantic import BaseModel
 from datetime import date, datetime
+from typing import Optional
 from app.models.category import TransactionType
 
 
 class TransactionBase(BaseModel):
     category_id: int
     amount: float
-    description: str | None = None
+    description: Optional[str] = None
     type: TransactionType
     date: date
 
@@ -16,11 +17,11 @@ class TransactionCreate(TransactionBase):
 
 
 class TransactionUpdate(BaseModel):
-    category_id: int | None = None
-    amount: float | None = None
-    description: str | None = None
-    type: TransactionType | None = None
-    date: date | None = None
+    category_id: Optional[int] = None
+    amount: Optional[float] = None
+    description: Optional[str] = None
+    type: Optional[TransactionType] = None
+    date: Optional[date] = None
 
 
 class TransactionResponse(TransactionBase):
