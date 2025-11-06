@@ -30,6 +30,11 @@ const Register = () => {
     setLoading(true);
 
     try {
+      console.log('Registering with data:', {
+        email: formData.email,
+        username: formData.username,
+        password: formData.password,
+      });
       await register({
         email: formData.email,
         username: formData.username,
@@ -37,7 +42,25 @@ const Register = () => {
       });
       navigate('/login');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Registration failed. Please try again.');
+      console.error('Registration error:', err);
+      console.error('Error response:', err.response?.data);
+      
+      // Handle validation errors from FastAPI
+      if (err.response?.data?.detail) {
+        if (Array.isArray(err.response.data.detail)) {
+          // FastAPI validation errors are arrays
+          const errorMessages = err.response.data.detail
+            .map(e => `${e.loc[e.loc.length - 1]}: ${e.msg}`)
+            .join(', ');
+          setError(errorMessages);
+        } else if (typeof err.response.data.detail === 'string') {
+          setError(err.response.data.detail);
+        } else {
+          setError('Registration failed. Please check your input.');
+        }
+      } else {
+        setError('Registration failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
